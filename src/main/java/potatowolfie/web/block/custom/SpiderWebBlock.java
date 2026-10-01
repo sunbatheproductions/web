@@ -35,13 +35,7 @@ import potatowolfie.web.item.WebItems;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 
 public class SpiderWebBlock extends BaseEntityBlock {
-    public static final MapCodec<SpiderWebBlock> CODEC = simpleCodec(SpiderWebBlock::new);
     public static final EnumProperty<WebType> WEB_TYPE = EnumProperty.create("web_type", WebType.class);
-
-    @Override
-    public MapCodec<SpiderWebBlock> codec() {
-        return CODEC;
-    }
 
     private static final VoxelShape GROUND_SHAPE = Block.box(-10, 0, -10, 26, 8, 26);
     private static final VoxelShape HANGING_SHAPE_NS = Block.box(0, 0, 6, 16, 16, 10);

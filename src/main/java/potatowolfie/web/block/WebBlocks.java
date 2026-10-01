@@ -43,7 +43,7 @@ public class WebBlocks {
                     .instabreak()
                     .noOcclusion()
                     .noCollision()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
                     .lightLevel(state -> 3)
             ));
 
@@ -70,7 +70,7 @@ public class WebBlocks {
                     .mapColor(MapColor.WARPED_STEM)
                     .sound(SoundType.GRASS)
                     .instabreak()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
                     .noCollision()
                     .replaceable()
                     .ignitedByLava()
@@ -79,7 +79,7 @@ public class WebBlocks {
     public static final Block SPIDER_WEB_BLOCK = registerBlock("spider_web_block",
             new SpiderWebBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBWEB)
                     .ignitedByLava()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
                     .setId(ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.fromNamespaceAndPath(Web.MOD_ID, "spider_web_block")))
             ));
 

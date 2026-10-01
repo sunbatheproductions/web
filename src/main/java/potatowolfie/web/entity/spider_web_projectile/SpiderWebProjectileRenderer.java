@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import org.joml.Matrix4f;
 import potatowolfie.web.Web;
 import potatowolfie.web.entity.client.WebEntityModelLayers;
 import potatowolfie.web.entity.custom.SpiderWebProjectileEntity;
@@ -48,9 +49,8 @@ public class SpiderWebProjectileRenderer extends ArrowRenderer<SpiderWebProjecti
                        final CameraRenderState cameraRenderState) {
 
         matrices.pushPose();
-
-        matrices.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
-        matrices.mulPose(Axis.ZP.rotationDegrees(renderState.xRot));
+        matrices.mulPose(new Matrix4f().rotation(Axis.YP.rotationDegrees(renderState.yRot - 90.0F)));
+        matrices.mulPose(new Matrix4f().rotation(Axis.ZP.rotationDegrees(renderState.xRot)));
 
         matrices.scale(1.0F, 1.0F, 1.0F);
         matrices.translate(-0.156F, -1.1875F, 0.0F);
@@ -62,8 +62,7 @@ public class SpiderWebProjectileRenderer extends ArrowRenderer<SpiderWebProjecti
                 RenderTypes.armorCutoutNoCull(this.getTextureLocation(renderState)),
                 renderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                renderState.outlineColor,
-                null
+                renderState.outlineColor
         );
 
         super.submit(renderState, matrices, queue, cameraRenderState);

@@ -8,8 +8,14 @@
 	"authors": [
 		"PotatoWolfie"
 	],
+	"contributors": [
+		"sunbatheproductions",
+		"daudiminecraft",
+		"Ko3leta",
+		"StarmanMine142"
+	],
 	"contact": {
-		"homepage": "https://potatowolfie.github.io/web.html",
+		"homepage": "https://potatowolfie.github.io/Web/",
 		"sources": "https://github.com/PotatoWolfie/web",
 		"issues": "https://github.com/PotatoWolfie/web/issues"
 	},
@@ -33,7 +39,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18.2",
-		"minecraft": "26.2",
+		"minecraft": "26.3",
 		"java": ">=25",
 		"fabric-api": "*"
 	},

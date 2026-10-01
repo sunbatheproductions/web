@@ -1,6 +1,7 @@
 package potatowolfie.web.entity.spider_web;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -8,6 +9,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import org.joml.Matrix4f;
 import potatowolfie.web.Web;
 import potatowolfie.web.entity.custom.SpiderWebEntity;
 
@@ -24,7 +26,7 @@ public class SpiderWebRenderer extends EntityRenderer<SpiderWebEntity, SpiderWeb
     @Override
     public void submit(SpiderWebRenderState spiderWebRenderState, PoseStack matrices, SubmitNodeCollector queue, CameraRenderState cameraRenderState) {
         matrices.pushPose();
-        matrices.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+        matrices.mulPose(new Matrix4f().rotation(Axis.XP.rotationDegrees(180.0F)));
         matrices.translate(0.0, -1.5, 0.0);
         matrices.scale(1.0f, 1.0f, 1.0f);
 
@@ -37,8 +39,7 @@ public class SpiderWebRenderer extends EntityRenderer<SpiderWebEntity, SpiderWeb
                 RenderTypes.armorCutoutNoCull(this.getTexture(spiderWebRenderState)),
                 spiderWebRenderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                spiderWebRenderState.outlineColor,
-                null
+                spiderWebRenderState.outlineColor
         );
 
         matrices.popPose();

@@ -10,12 +10,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SpiderGrassBlock extends VegetationBlock {
-    public static final MapCodec<SpiderGrassBlock> CODEC = simpleCodec(SpiderGrassBlock::new);
     private static final VoxelShape SHAPE = Block.column(12.0, 0.0, 3.0);
-
-    public MapCodec<SpiderGrassBlock> codec() {
-        return CODEC;
-    }
 
     public SpiderGrassBlock(Properties settings) {
         super(settings);

@@ -75,7 +75,6 @@ public class SpiderWebEntity extends Entity {
     public SpiderWebEntity(EntityType<?> type, Level world) {
         super(type, world);
         this.noPhysics = false;
-        this.setInvulnerable(false);
     }
 
     public SpiderWebEntity(Level world, double x, double y, double z) {

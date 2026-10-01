@@ -24,7 +24,7 @@ public class WebDataGenerator implements DataGeneratorEntrypoint {
 
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
-		registryBuilder.add(Registries.CONFIGURED_FEATURE, WebConfiguredFeatures::bootstrap);
+		registryBuilder.add(Registries.FEATURE, WebConfiguredFeatures::bootstrap);
 		registryBuilder.add(Registries.PLACED_FEATURE, WebPlacedFeatures::bootstrap);
 	}
 

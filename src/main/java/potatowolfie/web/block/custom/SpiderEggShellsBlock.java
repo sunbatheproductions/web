@@ -40,13 +40,6 @@ public class SpiderEggShellsBlock extends MultifaceSpreadeableBlock {
                 .setValue(INITIALIZED, false));
     }
 
-    public static final MapCodec<SpiderEggShellsBlock> CODEC = simpleCodec(SpiderEggShellsBlock::new);
-
-    @Override
-    public MapCodec<SpiderEggShellsBlock> codec() {
-        return CODEC;
-    }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);

@@ -1,6 +1,8 @@
 package potatowolfie.web.world.feature.custom;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import potatowolfie.web.block.WebBlocks;
 import potatowolfie.web.block.custom.SpiderEggShellsBlock;
 import potatowolfie.web.block.custom.SpiderWebBlock;
@@ -15,21 +17,30 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 
-public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConfig> {
+public record SpiderEggClusterFeature(
+        int minClusterSize,
+        int maxClusterSize,
+        int nestSpreadRadius,
+        float eggChance
+) implements Feature {
 
-    public SpiderEggClusterFeature(Codec<SpiderEggClusterFeatureConfig> codec) {
-        super(codec);
+    public static final MapCodec<SpiderEggClusterFeature> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    Codec.intRange(1, 20).fieldOf("min_cluster_size").forGetter(SpiderEggClusterFeature::minClusterSize),
+                    Codec.intRange(1, 40).fieldOf("max_cluster_size").forGetter(SpiderEggClusterFeature::maxClusterSize),
+                    Codec.intRange(1, 10).fieldOf("nest_spread_radius").forGetter(SpiderEggClusterFeature::nestSpreadRadius),
+                    Codec.floatRange(0.0f, 1.0f).fieldOf("egg_chance").forGetter(SpiderEggClusterFeature::eggChance)
+            ).apply(instance, SpiderEggClusterFeature::new)
+    );
+
+    public MapCodec<SpiderEggClusterFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<SpiderEggClusterFeatureConfig> context) {
-        WorldGenLevel world = context.level();
-        BlockPos origin = context.origin();
-        RandomSource random = context.random();
-        SpiderEggClusterFeatureConfig config = context.config();
-
+    public boolean place(WorldGenLevel world, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin) {
         BlockPos actualOrigin = findValidOrigin(world, origin);
         if (actualOrigin == null) {
             return false;
@@ -49,8 +60,8 @@ public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConf
         Set<BlockPos> nestPositions = new HashSet<>();
 
         for (int i = 0; i < clusterSize; i++) {
-            int x = actualOrigin.getX() + random.nextIntBetweenInclusive(-config.nestSpreadRadius(), config.nestSpreadRadius());
-            int z = actualOrigin.getZ() + random.nextIntBetweenInclusive(-config.nestSpreadRadius(), config.nestSpreadRadius());
+            int x = actualOrigin.getX() + random.nextIntBetweenInclusive(-nestSpreadRadius(), nestSpreadRadius());
+            int z = actualOrigin.getZ() + random.nextIntBetweenInclusive(-nestSpreadRadius(), nestSpreadRadius());
 
             BlockPos floorPos = findFloorPosition(world, new BlockPos(x, actualOrigin.getY(), z));
             if (floorPos != null && canPlaceNest(world, floorPos)) {
@@ -79,11 +90,11 @@ public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConf
             }
         }
 
-        generateEggsOnNests(world, nestPositions, random, config, mainEggPositions);
+        generateEggsOnNests(world, nestPositions, random, mainEggPositions);
         generateStandaloneEggs(world, actualOrigin, random, nestPositions, mainEggPositions);
         generateSpiderWebBlocks(world, actualOrigin, random, nestPositions);
         generateSpiderGrassOnMoss(world, nestPositions, random);
-        placeSpiderEggShells(world, actualOrigin, nestPositions, random, config);
+        placeSpiderEggShells(world, actualOrigin, nestPositions, random);
 
         return !nestPositions.isEmpty();
     }
@@ -132,7 +143,7 @@ public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConf
         return placedAny;
     }
 
-    private void generateEggsOnNests(WorldGenLevel world, Set<BlockPos> nestPositions, RandomSource random, SpiderEggClusterFeatureConfig config, Set<BlockPos> mainEggPositions) {
+    private void generateEggsOnNests(WorldGenLevel world, Set<BlockPos> nestPositions, RandomSource random, Set<BlockPos> mainEggPositions) {
         int maxEggs = Math.max(6, nestPositions.size() / 4);
         int eggsPlaced = 0;
         Set<BlockPos> usedEggPositions = new HashSet<>(mainEggPositions);
@@ -143,7 +154,7 @@ public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConf
             BlockPos eggPos = nestPos.above();
             if (mainEggPositions.contains(eggPos)) continue;
 
-            if (random.nextFloat() < (config.eggChance() * 1.2f) && world.getBlockState(eggPos).isAir()) {
+            if (random.nextFloat() < (eggChance() * 1.2f) && world.getBlockState(eggPos).isAir()) {
                 boolean canPlace = true;
 
                 for (BlockPos usedPos : usedEggPositions) {
@@ -474,8 +485,8 @@ public class SpiderEggClusterFeature extends Feature<SpiderEggClusterFeatureConf
                 state.is(Blocks.AMETHYST_BLOCK);
     }
 
-    private void placeSpiderEggShells(WorldGenLevel world, BlockPos origin, Set<BlockPos> nestPositions, RandomSource random, SpiderEggClusterFeatureConfig config) {
-        int shellRadius = config.nestSpreadRadius() + 4;
+    private void placeSpiderEggShells(WorldGenLevel world, BlockPos origin, Set<BlockPos> nestPositions, RandomSource random) {
+        int shellRadius = nestSpreadRadius() + 4;
 
         int guaranteedShells = Math.max(10, nestPositions.size() / 3);
         int shellsPlaced = 0;

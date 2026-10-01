@@ -1,6 +1,7 @@
 package potatowolfie.web.entity.spider_web_block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import potatowolfie.web.block.custom.SpiderWebBlock;
 import potatowolfie.web.entity.client.WebEntityModelLayers;
 import potatowolfie.web.entity.custom.SpiderWebBlockEntity;
@@ -43,7 +45,7 @@ public class SpiderWebBlockEntityRenderer implements BlockEntityRenderer<SpiderW
         }
 
         poseStack.pushPose();
-        poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+        poseStack.mulPose(new Matrix4f().rotation(Axis.XP.rotationDegrees(180.0F)));
         poseStack.translate(0.0, -1.5, 0.0);
         poseStack.scale(1.0f, 1.0f, 1.0f);
         poseStack.translate(0.45, 0, -0.5);
@@ -54,10 +56,7 @@ public class SpiderWebBlockEntityRenderer implements BlockEntityRenderer<SpiderW
                 RenderTypes.armorCutoutNoCull(TEXTURE),
                 state.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                null,
-                -1,
-                state.breakProgress,
-                0
+                null
         );
 
         poseStack.popPose();
